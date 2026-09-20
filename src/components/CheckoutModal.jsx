@@ -83,7 +83,7 @@ export default function CheckoutModal() {
       console.warn('Sheet append error:', err);
     }
 
-    // 3. Dispatch automated email notification to guganvs2@gmail.com
+    // 3. Dispatch automated email notification to kpriyadharshini2431997@gmail.com
     try {
       await sendOrderEmailNotification(orderData);
     } catch (err) {
@@ -206,80 +206,19 @@ export default function CheckoutModal() {
           {/* Payment Method Selection */}
           <div className="space-y-3">
             <h3 className="text-xs font-black text-[#0f1111] uppercase tracking-wider flex items-center gap-1.5 pb-1 border-b border-gray-200">
-              <QrCode className="w-4 h-4 text-[#007600]" />
+              <MapPin className="w-4 h-4 text-[#007600]" />
               2. Payment Option
             </h3>
 
-            <div className="grid grid-cols-2 gap-3">
-              {/* Option 1: COD */}
-              <label
-                className={`p-3 rounded-xl border-2 cursor-pointer flex items-center gap-3 transition-all ${
-                  paymentMethod === 'cod'
-                    ? 'border-[#87d8d2] bg-[#c6f3ed]/30 shadow-2xs'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="payment"
-                  value="cod"
-                  checked={paymentMethod === 'cod'}
-                  onChange={() => setPaymentMethod('cod')}
-                  className="text-[#007600] focus:ring-[#007600]"
-                />
-                <div>
-                  <div className="font-extrabold text-xs text-[#0f1111]">Cash on Delivery</div>
-                  <div className="text-[10px] text-[#565959]">Pay when item arrives</div>
-                </div>
-              </label>
-
-              {/* Option 2: UPI / QR */}
-              <label
-                className={`p-3 rounded-xl border-2 cursor-pointer flex items-center gap-3 transition-all ${
-                  paymentMethod === 'upi'
-                    ? 'border-[#87d8d2] bg-[#c6f3ed]/30 shadow-2xs'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="payment"
-                  value="upi"
-                  checked={paymentMethod === 'upi'}
-                  onChange={() => setPaymentMethod('upi')}
-                  className="text-[#007600] focus:ring-[#007600]"
-                />
-                <div>
-                  <div className="font-extrabold text-xs text-[#0f1111]">UPI / QR Code</div>
-                  <div className="text-[10px] text-[#565959]">GPay, PhonePe, Paytm</div>
-                </div>
-              </label>
-            </div>
-
-            {/* UPI QR Display Box if UPI selected */}
-            {paymentMethod === 'upi' && (
-              <div className="p-4 bg-[#f7f8f8] rounded-xl border border-gray-200 text-center animate-in fade-in duration-200">
-                <p className="text-xs font-bold text-[#0f1111] mb-1">Scan QR Code to Pay ₹{finalTotal}</p>
-                <p className="text-[11px] text-[#565959] mb-3">UPI ID: <span className="font-mono font-bold text-[#007600]">{upiId}</span></p>
-
-                <div className="w-44 h-44 mx-auto bg-white p-2 border border-gray-300 rounded-lg shadow-2xs mb-3">
-                  <img src={qrCodeUrl} alt="UPI QR Code" className="w-full h-full object-contain" />
-                </div>
-
-                <div className="max-w-xs mx-auto text-left">
-                  <label className="block text-[11px] font-bold text-[#0f1111] mb-1">
-                    UPI Transaction Reference / UTR No (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    value={upiRefNo}
-                    onChange={(e) => setUpiRefNo(e.target.value)}
-                    placeholder="Enter 12-digit UTR number after paying"
-                    className="w-full px-3 py-1.5 bg-white border border-gray-300 rounded-full text-xs font-mono text-[#0f1111] focus:outline-none"
-                  />
-                </div>
+            <div className="p-3.5 rounded-xl border-2 border-[#87d8d2] bg-[#c6f3ed]/30 flex items-center gap-3">
+              <div className="w-5 h-5 rounded-full bg-[#007600] flex items-center justify-center text-white text-xs font-bold shadow-xs">
+                ✓
               </div>
-            )}
+              <div>
+                <div className="font-extrabold text-xs text-[#0f1111]">Cash on Delivery (COD)</div>
+                <div className="text-[11px] text-[#007600] font-semibold">Pay cash directly when item is delivered to your address</div>
+              </div>
+            </div>
           </div>
 
           {/* Order Summary Box */}

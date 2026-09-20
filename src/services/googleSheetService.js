@@ -252,23 +252,41 @@ export async function fetchLiveCookingShorts() {
             else if (colName.includes('unit')) unit = val;
             else if (colName.includes('desc')) description = val;
 
+            // Detect YouTube links (Shorts / Watch / Embed)
+            const ytMatch = val.match(/(?:youtube\.com\/(?:shorts\/|watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
             // Detect Google Drive file URLs or drive IDs
-            let driveMatch = val.match(/\/d\/([a-zA-Z0-9_-]+)/) || val.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-            if (driveMatch && driveMatch[1]) {
-              rowDriveLinks.push({ fileId: driveMatch[1], rawUrl: val });
+            const driveMatch = val.match(/\/d\/([a-zA-Z0-9_-]+)/) || val.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+
+            if (ytMatch && ytMatch[1]) {
+              const videoId = ytMatch[1];
+              rowDriveLinks.push({
+                type: 'youtube',
+                videoId,
+                videoUrl: `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=1&rel=0&playsinline=1`,
+                rawUrl: val
+              });
+            } else if (driveMatch && driveMatch[1]) {
+              const fileId = driveMatch[1];
+              rowDriveLinks.push({
+                type: 'drive',
+                fileId,
+                videoUrl: `https://drive.google.com/file/d/${fileId}/preview`,
+                streamUrl: `https://lh3.googleusercontent.com/d/${fileId}`,
+                rawUrl: val
+              });
             }
           });
 
           rowDriveLinks.forEach((linkItem, linkIdx) => {
-            const fileId = linkItem.fileId;
-            if (!fileId || seenFileIds.has(fileId)) return;
-            seenFileIds.add(fileId);
+            const key = linkItem.videoId || linkItem.fileId || `${rowIdx}-${linkIdx}`;
+            if (!key || seenFileIds.has(key)) return;
+            seenFileIds.add(key);
 
             const shortTitle = name ? `🌾 ${name} - Sakthi Recipe` : `Sakthi Organic Recipe Video #${liveDriveShorts.length + 1}`;
             const shortDesc = description || `Traditional ${name || category || 'organic recipe'} video directly from Sakthi Foods Kumbakonam.`;
 
             liveDriveShorts.push({
-              id: `drive-vid-${gid}-${rowIdx + 1}-${linkIdx + 1}`,
+              id: `vid-${gid}-${rowIdx + 1}-${linkIdx + 1}`,
               title: shortTitle,
               description: shortDesc,
               author: 'Sakthi Foods Organic',
@@ -277,15 +295,17 @@ export async function fetchLiveCookingShorts() {
               likesCount: Math.floor(Math.random() * 2000) + 800,
               sharesCount: Math.floor(Math.random() * 400) + 100,
               commentsCount: Math.floor(Math.random() * 100) + 20,
-              videoUrl: `https://drive.google.com/file/d/${fileId}/preview`,
-              streamUrl: `https://lh3.googleusercontent.com/d/${fileId}`,
-              videoType: 'drive',
+              videoUrl: linkItem.videoUrl,
+              streamUrl: linkItem.streamUrl || linkItem.videoUrl,
+              videoType: linkItem.type,
+              fileId: linkItem.fileId,
+              videoId: linkItem.videoId,
               category: category || 'Organic Foods',
               productId: `${rowIdx + 1}`,
               productName: name || 'Sakthi Organic Product',
               productPrice: price || 0,
               productUnit: unit || '1 kg',
-              productImage: `https://lh3.googleusercontent.com/d/${fileId}`,
+              productImage: linkItem.fileId ? `https://lh3.googleusercontent.com/d/${linkItem.fileId}` : '/assets/logo.png',
               audioTrack: 'Sakthi Foods Original Audio 🎵',
               rawUrl: linkItem.rawUrl
             });

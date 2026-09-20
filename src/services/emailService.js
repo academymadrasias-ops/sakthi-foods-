@@ -1,10 +1,10 @@
 // Email Service for Sakthi Foods Order Notifications
-// Target Admin Email: guganvs2@gmail.com
+// Target Admin Email: kpriyadharshini2431997@gmail.com
 
-const TARGET_ADMIN_EMAIL = 'guganvs2@gmail.com';
+const TARGET_ADMIN_EMAIL = 'kpriyadharshini2431997@gmail.com';
 
 /**
- * Sends order notification email directly to guganvs2@gmail.com
+ * Sends order notification email directly to kpriyadharshini2431997@gmail.com
  */
 export async function sendOrderEmailNotification(orderData) {
   const { orderId, date, customer, items, subtotalPrice, deliveryCharge, totalSavings, finalTotal, paymentMethod, upiRefNo } = orderData;
@@ -38,7 +38,7 @@ export async function sendOrderEmailNotification(orderData) {
   };
 
   try {
-    // Primary Email API Dispatch to guganvs2@gmail.com via FormSubmit
+    // Primary Email API Dispatch to kpriyadharshini2431997@gmail.com via FormSubmit
     const res = await fetch(`https://formsubmit.co/ajax/${TARGET_ADMIN_EMAIL}`, {
       method: 'POST',
       headers: {
@@ -56,7 +56,7 @@ export async function sendOrderEmailNotification(orderData) {
     console.warn('FormSubmit email dispatch error:', err);
   }
 
-  // Backup Web3Forms Dispatch to guganvs2@gmail.com
+  // Backup Web3Forms Dispatch to kpriyadharshini2431997@gmail.com
   try {
     const backupRes = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',

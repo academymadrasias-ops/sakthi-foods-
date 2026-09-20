@@ -304,16 +304,18 @@ export default function CookingShortsSection({ onClose }) {
                       <iframe
                         src={`${short.videoUrl}${isCurrent && isPlaying ? '&autoplay=1' : '&autoplay=0'}${isMuted ? '&mute=1' : '&mute=0'}`}
                         title={short.title}
-                        className="w-full h-full object-cover scale-[1.03] pointer-events-none"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        className="w-full h-full object-cover scale-[1.03] pointer-events-auto border-0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       ></iframe>
                     ) : short.videoType === 'drive' ? (
-                      <iframe
-                        src={short.videoUrl}
-                        title={short.title}
-                        className="w-full h-full object-cover pointer-events-none"
-                        allow="autoplay"
-                      ></iframe>
+                      <div className="relative w-full h-full bg-black">
+                        <iframe
+                          src={short.videoUrl}
+                          title={short.title}
+                          className="w-full h-full object-cover pointer-events-auto border-0"
+                          allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                        ></iframe>
+                      </div>
                     ) : (
                       <video
                         src={short.videoUrl}
